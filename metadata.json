@@ -1,0 +1,5 @@
+{
+  "name": "Bilingual Word Sync & Translator",
+  "description": "A sophisticated platform for translating English documents to Chinese, featuring side-by-side editing where changes in the translation automatically update the original source with context-aware reverse translation.",
+  "requestFramePermissions": []
+}
