@@ -2,79 +2,149 @@
 <img width="1200" height="475" alt="Bilingual Sync Editor" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
+<p align="center">
+  <a href="#english-version">English Version</a> ｜ <a href="#中文介绍">中文介绍</a>
+</p>
+
 # Sync Editor Pro
 
-Sync Editor Pro 是一款面向英文论文/文档的「双语同步编辑器」，支持导入 Word/Markdown、并排显示中英文段落，提供批量翻译、句子级编辑与撤销、工程导入导出、暗色主题等能力。用户可以在界面内配置自己的模型地址和 API Key，因此无需在仓库中写死任何密钥即可直接运行。
+## English Version
 
-## ✨ 主要特性
+Sync Editor Pro is a bilingual workspace tailored for long-form English documents. Import Word/Markdown files, split them into aligned sentences, trigger bulk or single-sentence translations, and keep edits synchronized across languages with a full undo stack. API credentials are configured inside the UI, so every user can attach their own Gemini or OpenAI-compatible endpoint without touching repo secrets.
 
-- **文档导入与分段**：支持 `.docx / .md / .txt`，自动拆分段落与句子。
-- **双语同步编辑**：每个句子对应一行，支持手动修改、句内同步、合并/拆分等结构调整。
-- **批量与单句翻译**：并发调用 Gemini 模型（或任意兼容 OpenAI Chat Completions 的接口）。
-- **自定义翻译风格**：可配置并保存多个 Prompt 风格，支持本地缓存。
-- **历史撤销系统**：完整的段落快照与智能编辑锁，快捷键 `Ctrl+Z` 即可恢复。
-- **工程导入导出**：一键打包当前翻译、原文及配置，方便切换设备继续工作。
-- **个性化 API 配置**：在 UI 中填写 Base URL、模型名称、API Key，并测试连通性，无需预置环境变量。
+### Highlights
 
-## 🧱 技术栈
+- **Flexible imports**: `.docx`, `.md`, and `.txt` with automatic paragraph/sentence splitting.
+- **Side-by-side editing**: Modify either language, sync updates automatically, and merge/split sentences when needed.
+- **Bulk & single translation**: Run concurrent Gemini calls (or any OpenAI-compatible API) across whole documents or specific sentences.
+- **Custom style presets**: Maintain multiple translation prompts, edit them inline, and persist them in `localStorage`.
+- **Full undo history**: Snapshot up to 50 states, use `Ctrl+Z`, and benefit from lock-based debouncing while typing.
+- **Project import/export**: Zip current segments, styles, original files, and API settings to continue on another machine.
+- **In-app API configuration**: Base URL, model name, and API key are editable in the settings modal with a connection test button.
+
+### Tech Stack
 
 - [Vite 6](https://vitejs.dev/)
 - [React 19](https://react.dev/)
 - TypeScript
-- TailwindCSS（CDN 版本） + 自定义样式
-- Google Gemini SDK / 自定义 OpenAI 兼容接口
+- TailwindCSS (CDN) + custom styles
+- Google Gemini SDK / OpenAI-compatible REST API
 
-## 📦 环境要求
+### Requirements
 
 - Node.js 18+
-- npm（随 Node 安装）
+- npm (bundled with Node)
 
-> 项目默认使用 Vite 的 `.env` 机制读取 `GEMINI_API_KEY`，但只是作为兜底。日常使用推荐直接在 UI 内输入 API 信息。
+> `.env.local` can hold `GEMINI_API_KEY` as a fallback (`process.env.API_KEY`), but the recommended workflow is to enter credentials in the UI.
 
-## 🚀 安装与启动
+### Getting Started
 
 ```bash
 git clone <repo>
 cd Sync-Editor-Pro
 npm install
 
-# 开发模式（默认 3000 端口，如被占用会自动切换）
+# starts the dev server (defaults to 3000; switches to 3001+ if busy)
 npm run dev
 ```
 
-启动后访问终端输出的地址（例如 `http://localhost:3000/` 或 `http://localhost:3001/`）。首次进入界面时页面为空，按照提示上传文档或导入工程即可开始使用。
+Open the terminal URL (e.g., `http://localhost:3000/`). The canvas starts empty—upload a document or import an existing project to begin.
 
-### API 配置
+#### API Configuration Flow
 
-1. 点击右上角齿轮按钮打开 **API & 模型配置** 面板。
-2. 根据自己的服务填写：
-   - **Base URL**：例如 `https://api.juheai.top/v1`（可留空，表示使用官方 Gemini SDK）。
-   - **Model**：如 `gemini-3-flash-preview` 或自定义模型名称。
-   - **API Key**：填写你的密钥，保存在本地 `localStorage` 中。
-3. 点击「测试连接」验证可用性后再保存。配置保存后所有翻译调用都会使用你提供的参数。
+1. Click the gear icon in the header to open **API & Model Settings**.
+2. Enter:
+   - **Base URL** (optional): e.g., `https://api.juheai.top/v1` if using an OpenAI-compatible service.
+   - **Model**: e.g., `gemini-3-flash-preview`.
+   - **API Key**: stored only in the browser.
+3. Press **Test Connection** to verify the provider, then save. All translation requests reuse these settings.
 
-> 若仍希望在命令行层面设置默认密钥，可在 `.env.local` 中添加 `GEMINI_API_KEY=<your-key>`，Vite 会自动注入为 `process.env.API_KEY`。
-
-### 构建与预览
+#### Build & Preview
 
 ```bash
-# 生产构建
 npm run build
-
-# 本地预览打包产物
 npm run preview
 ```
 
-构建输出位于 `dist/` 目录，可直接部署到任意静态资源托管平台。
+Artifacts live in `dist/` and can be deployed to any static host.
 
-## 🧰 常见问题
+### Troubleshooting
+
+| Issue | Fix |
+| --- | --- |
+| Blank screen | Ensure `npm run dev` is running and that `index.html` includes `<script type="module" src="/index.tsx"></script>`. Force-refresh (`Ctrl+Shift+R`). |
+| Port conflict | Vite automatically bumps to the next free port (3001+). Use the URL printed in the console or change the default in `vite.config.ts`. |
+| API failures | Double-check Base URL/model/key, then re-run **Test Connection** and inspect the browser console/logs. |
+
+### License
+
+Distributed under the [MIT License](./LICENSE).
+
+---
+
+## 中文介绍
+
+Sync Editor Pro 是面向英文文档的双语同步编辑器。它支持导入 Word/Markdown 文件、自动拆分句子、批量或单句翻译、历史撤销、工程导入导出等能力。所有模型配置都在界面中完成，因此每位用户都可以使用自己的 Gemini 或 OpenAI 兼容接口。
+
+### 主要特性
+
+- **文档导入与分段**：支持 `.docx / .md / .txt`，自动拆分段落和句子。
+- **双语并排编辑**：任意一侧的修改都会同步另一侧，可合并/拆分句子、悬停高亮。
+- **批量与单句翻译**：并发调用 Gemini 或其他 OpenAI 兼容接口。
+- **自定义翻译风格**：在 UI 中维护多套 Prompt，可实时编辑并保存到本地。
+- **完整撤销系统**：最多 50 条历史快照，`Ctrl+Z` 快速撤回，内置编辑锁确保录入顺畅。
+- **工程导入导出**：打包当前段落、样式、原文件、API 设置，跨设备继续翻译。
+- **界面级 API 设置**：Base URL / Model / API Key 全部在设置面板中填写，并可测试连通性。
+
+### 技术栈
+
+- Vite 6
+- React 19
+- TypeScript
+- TailwindCSS（CDN）+ 自定义样式
+- Google Gemini SDK / OpenAI 兼容接口
+
+### 环境要求
+
+- Node.js 18+
+- npm（随 Node 安装）
+
+> `.env.local` 中的 `GEMINI_API_KEY` 仅作为兜底；推荐直接在界面中录入密钥，方便个人化使用。
+
+### 安装与运行
+
+```bash
+git clone <repo>
+cd Sync-Editor-Pro
+npm install
+npm run dev
+```
+
+根据终端输出访问 `http://localhost:3000/`（若端口被占用会自动切换到 3001+）。首次进入页面为空，按照提示上传文档或导入项目即可开始。
+
+#### API 配置步骤
+
+1. 点击右上角齿轮按钮，打开 **API & 模型配置**。
+2. 输入 Base URL（可选）、模型名称以及 API Key。
+3. 点击“测试连接”确认可用，再保存配置。之后的所有翻译都会使用该设置。
+
+#### 构建与预览
+
+```bash
+npm run build
+npm run preview
+```
+
+构建结果位于 `dist/` 目录，可部署到任意静态托管平台。
+
+### 常见问题
 
 | 问题 | 解决方案 |
 | --- | --- |
-| 浏览器白屏 | 确认 `npm run dev` 正在运行，且 `index.html` 中通过 `<script type="module" src="/index.tsx"></script>` 正确加载入口。强制刷新 (Ctrl+Shift+R)。 |
-| 端口被占用 | Vite 会自动切换到 `3001+`，按终端提示访问即可；或自行在 `vite.config.ts` 修改默认端口。 |
-| API 调用失败 | 检查 UI 中的 Base URL、模型名和 Key 是否正确，必要时在日志/控制台查看报错。 |
+| 页面空白 | 确保 `npm run dev` 在运行，并强制刷新；若仍无内容，检查 `index.html` 是否引入 `/index.tsx`。 |
+| 端口被占用 | Vite 会自动改用 3001+，按终端提示访问即可，或在 `vite.config.ts` 自行修改端口。 |
+| API 报错 | 检查 Base URL / 模型 / Key 是否填写正确，并使用“测试连接”确认。 |
 
-## 📄 许可
+### 许可证
 
-当前项目未明确指定 License，如需公开分发请先与作者确认或补充许可证说明。
+本项目使用 [MIT License](./LICENSE) 开源，欢迎在遵守条款的前提下自由使用与分发。
